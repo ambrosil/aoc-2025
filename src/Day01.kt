@@ -3,21 +3,45 @@ import utils.readInput
 
 fun main() {
     fun part1(input: List<String>): Int {
-        return input.size
+        var start = 50
+        return input.count { line ->
+            val dir = line.first()
+            val n = line.drop(1).toInt()
+
+            start = when (dir) {
+                'L' -> (start - n).mod(100)
+                'R' -> (start + n).mod(100)
+                else -> start
+            }
+
+            start == 0
+        }
     }
 
     fun part2(input: List<String>): Int {
-        return input.size
+        var start = 50
+        var counter = 0
+
+        input.forEach { line ->
+            val dir = line.first()
+            val n = line.drop(1).toInt()
+
+            counter += when (dir) {
+                'L' -> (start - 1).floorDiv(100) - (start - n - 1).floorDiv(100)
+                'R' -> (start + n) / 100
+                else -> 0
+            }
+
+            start = when (dir) {
+                'L' -> (start - n).mod(100)
+                'R' -> (start + n).mod(100)
+                else -> start
+            }
+        }
+
+        return counter
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("test_input")) == 1)
-
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 1)
-
-    // Read the input from the `src/Day01.txt` file.
     val input = readInput("Day01")
     part1(input).println()
     part2(input).println()
