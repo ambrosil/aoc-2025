@@ -43,3 +43,8 @@ fun List<String>.matrixAsChars(): MutableMap<Point, Char> {
 
     return matrix
 }
+
+fun List<String>.parseTwoLists(): List<List<String>> =
+    joinToString("\r\n")
+        .split("\r\n\r\n")
+        .map { it.lines() }
