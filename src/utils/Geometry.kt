@@ -272,3 +272,58 @@ enum class Direction8 {
         NORTH_WEST -> "↖"
     }
 }
+
+data class Point3D(val x: Int, val y: Int, val z: Int) {
+
+    fun distance(other: Point3D): Double =
+        sqrt((other.x - x).toDouble().pow(2) + (other.y - y).toDouble().pow(2) + (other.z - z).toDouble().pow(2))
+
+    companion object {
+        fun of(input: String): Point3D =
+            input.split(",").let {
+                Point3D(it[0].toInt(), it[1].toInt(), it[2].toInt())
+            }
+    }
+}
+
+class DisjointSet<T> {
+    private val parents: MutableMap<T, T> = mutableMapOf()
+    private val counts: MutableMap<T, Int> = mutableMapOf()
+
+    fun setSizes(): List<Int> = counts.values.toList()
+
+    fun countSets(): Int = counts.size
+
+    fun addAll(elements: Collection<T>) =
+        elements.forEach { add(it) }
+
+    fun add(element: T) {
+        if(element !in parents) {
+            parents[element] = element
+            counts[element] = 1
+        }
+    }
+
+    fun find(element: T): T =
+        if(parents.getValue(element) == element) element
+        else find(parents.getValue(element)).also {
+            parents[element] = it
+        }
+
+    fun union(left: T, right: T) {
+        val leftRoot = find(left)
+        val rightRoot = find(right)
+
+        if(leftRoot != rightRoot) {
+            if(counts.getValue(leftRoot) < counts.getValue(rightRoot)) {
+                parents[rightRoot] = leftRoot
+                counts[leftRoot] = counts.getValue(leftRoot) + counts.getValue(rightRoot)
+                counts.remove(rightRoot)
+            } else {
+                parents[leftRoot] = rightRoot
+                counts[rightRoot] = counts.getValue(rightRoot) + counts.getValue(leftRoot)
+                counts.remove(leftRoot)
+            }
+        }
+    }
+}
