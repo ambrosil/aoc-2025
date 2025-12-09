@@ -1,7 +1,7 @@
 package utils
 
 import utils.Direction.*
-import utils.Turn.*
+import utils.Turn.RIGHT
 import kotlin.math.*
 
 data class PointL(val x: Long, val y: Long) {
@@ -22,6 +22,10 @@ data class Point(val x: Int, val y: Int) {
 
     companion object {
         val ORIGIN = Point(0, 0)
+        fun of(input: String): Point =
+            input.split(",").let {
+                Point(it.first().toInt(), it.last().toInt())
+            }
     }
 
     operator fun plus(other: Point): Point {

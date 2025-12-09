@@ -4,6 +4,8 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Reads lines from the given input txt file.
@@ -48,3 +50,9 @@ fun List<String>.parseTwoLists(): List<List<String>> =
     joinToString("\r\n")
         .split("\r\n\r\n")
         .map { it.lines() }
+
+fun IntRange.overlaps(other: IntRange): Boolean =
+    max(first, other.first) <= min(last, other.last)
+
+fun IntRange.size(): Int =
+    last - first +1
